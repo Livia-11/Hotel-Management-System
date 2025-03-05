@@ -1,17 +1,17 @@
 package com.hotel.mgt.hotelmanagementsystem.dao;
 
-import com.hotel.mgt.hotelmanagementsystem.model.Guest;
+import com.hotel.mgt.hotelmanagementsystem.model.Service;
 import com.hotel.mgt.hotelmanagementsystem.config.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
-public class GuestDAO {
-    public void save(Guest guest) {
+public class ServiceDAO {
+    public void save(Service service) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.persist(guest);
+            session.persist(service);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -21,23 +21,23 @@ public class GuestDAO {
         }
     }
 
-    public Guest findById(int id) {
+    public Service findById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Guest.class, id);
+            return session.get(Service.class, id);
         }
     }
 
-    public List<Guest> findAll() {
+    public List<Service> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Guest", Guest.class).list();
+            return session.createQuery("from Service", Service.class).list();
         }
     }
 
-    public void update(Guest guest) {
+    public void update(Service service) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.merge(guest);
+            session.merge(service);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -47,11 +47,11 @@ public class GuestDAO {
         }
     }
 
-    public void delete(Guest guest) {
+    public void delete(Service service) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.remove(guest);
+            session.remove(service);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

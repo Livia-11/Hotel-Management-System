@@ -1,17 +1,18 @@
 package com.hotel.mgt.hotelmanagementsystem.dao;
 
-import com.hotel.mgt.hotelmanagementsystem.model.Guest;
+import com.hotel.mgt.hotelmanagementsystem.model.Booking;
 import com.hotel.mgt.hotelmanagementsystem.config.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import java.time.LocalDate;
 import java.util.List;
 
-public class GuestDAO {
-    public void save(Guest guest) {
+public class BookingDAO {
+    public void save(Booking booking) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.persist(guest);
+            session.persist(booking);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -21,23 +22,34 @@ public class GuestDAO {
         }
     }
 
-    public Guest findById(int id) {
+    public Booking findById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Guest.class, id);
+            return session.get(Booking.class, id);
         }
     }
 
-    public List<Guest> findAll() {
+    public List<Booking> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Guest", Guest.class).list();
+            return session.createQuery("from Booking", Booking.class).list();
         }
     }
 
-    public void update(Guest guest) {
+    public List<Booking> findBookingsByDateRange(LocalDate startDate, LocalDate endDate) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                "from Booking where checkInDate >= :startDate and checkOutDate <= :endDate",
+                Booking.class)
+                .setParameter("startDate", startDate)
+                .setParameter("endDate", endDate)
+                .list();
+        }
+    }
+
+    public void update(Booking booking) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.merge(guest);
+            session.merge(booking);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -47,11 +59,11 @@ public class GuestDAO {
         }
     }
 
-    public void delete(Guest guest) {
+    public void delete(Booking booking) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.remove(guest);
+            session.remove(booking);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

@@ -1,17 +1,17 @@
 package com.hotel.mgt.hotelmanagementsystem.dao;
 
-import com.hotel.mgt.hotelmanagementsystem.model.Guest;
+import com.hotel.mgt.hotelmanagementsystem.model.Room;
 import com.hotel.mgt.hotelmanagementsystem.config.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
-public class GuestDAO {
-    public void save(Guest guest) {
+public class RoomDAO {
+    public void save(Room room) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.persist(guest);
+            session.persist(room);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -21,23 +21,32 @@ public class GuestDAO {
         }
     }
 
-    public Guest findById(int id) {
+    public Room findById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Guest.class, id);
+            return session.get(Room.class, id);
         }
     }
 
-    public List<Guest> findAll() {
+    public List<Room> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Guest", Guest.class).list();
+            return session.createQuery("from Room", Room.class).list();
         }
     }
 
-    public void update(Guest guest) {
+    public List<Room> findAvailableRooms() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                "from Room where isAvailable = true", 
+                Room.class
+            ).list();
+        }
+    }
+
+    public void update(Room room) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.merge(guest);
+            session.merge(room);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -47,11 +56,11 @@ public class GuestDAO {
         }
     }
 
-    public void delete(Guest guest) {
+    public void delete(Room room) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.remove(guest);
+            session.remove(room);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
