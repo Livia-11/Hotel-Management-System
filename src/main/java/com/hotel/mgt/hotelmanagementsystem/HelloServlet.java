@@ -1,0 +1,1 @@
+// Delete this file as we'll create a proper MVC structure
